@@ -12,7 +12,36 @@ class NewCustomer extends Component {
       email: '',
       type: ''
     },
-    error: false
+    error: false,
+    emails: []
+  }
+
+  // Adds a new dynamic email input
+  newField = () => {
+    this.setState({
+      emails: this.state.emails.concat([{email: ''}])
+    })
+  }
+
+  // Deletes an existing dynamic email input
+  deleteField = i => () => {
+    this.setState({
+      emails: this.state.emails.filter((email, index) => i !== index)
+    })
+  }
+
+  // Reads an email from dynamic input
+  readField = i => e => {
+    const newEmail = this.state.emails.map((email, index) => {
+      if (i !== index) return email
+      return {
+        ...email,
+        email: e.target.value
+      }
+    })
+    this.setState({
+      emails: newEmail
+    })
   }
 
   render() {
@@ -33,7 +62,8 @@ class NewCustomer extends Component {
                 onSubmit={(e) => {
                   e.preventDefault()
 
-                  const {name, surname, company, age, type, email} = this.state.customer
+                  const {name, surname, company, age, type} = this.state.customer
+                  const {emails} = this.state
 
                   if (name === '' || surname === '' || company === '' || age === '' || type === '') {
                     this.setState({
@@ -52,7 +82,7 @@ class NewCustomer extends Component {
                     company,
                     type,
                     age: Number(age),
-                    email
+                    emails
                   }
 
                   createCustomer({
@@ -94,7 +124,7 @@ class NewCustomer extends Component {
                   </div>
                 </div>
                 <div className="form-row">
-                  <div className="form-group col-md-6">
+                  <div className="form-group col-md-12">
                     <label>Company</label>
                     <input
                       type="text"
@@ -110,23 +140,39 @@ class NewCustomer extends Component {
                       }}
                     />
                   </div>
-                  <div className="form-group col-md-6">
-                    <label>Email</label>
-                    <input
-                      type="email"
-                      className="form-control"
-                      placeholder="Email"
-                      onChange={(e) => {
-                        this.setState({
-                          customer: {
-                            ...this.state.customer,
-                            email: e.target.value
-                          }
-                        })
-                      }}
-                     />
+                  {this.state.emails.map((input, index) => (
+                    <div key={index} className="form-group col-md-12">
+                      <label>Email: {index + 1}</label>
+
+                      <div className="input-group">
+                        <input
+                          type="email"
+                          placeholder="Email"
+                          className="form-control"
+                          onChange={this.readField(index)}
+                        />
+
+                        <div className="input-group-append">
+                          <button
+                            type="button"
+                            className="btn btn-danger"
+                            onClick={this.deleteField(index)}>
+                            &times; Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="form-group d-flex justify-content-center col-md-12">
+                    <button
+                      type="button"
+                      className="btn btn-warning"
+                      onClick={this.newField}>
+                      + Add Email
+                    </button>
                   </div>
                 </div>
+
                 <div className="form-row">
                   <div className="form-group col-md-6">
                     <label>Age</label>
