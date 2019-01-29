@@ -11,15 +11,22 @@ class NewCustomer extends Component {
       company: '',
       email: '',
       type: ''
-    }
+    },
+    error: false
   }
 
   render() {
+    const { error } = this.state
+    let response = (error) ? <p className="alert alert-danger p3 text-center">All fields are required</p> : '';
     return (
       <Fragment>
         <h2 className="text-center">New Customer</h2>
+        {response}
         <div className="row justify-content-center">
-          <Mutation mutation={NEW_CUSTOMER}>
+          <Mutation
+            mutation={NEW_CUSTOMER}
+            onCompleted={() => this.props.history.push('/')}
+            >
             { createCustomer => (
               <form
                 className="col-md-8 m-3"
@@ -27,6 +34,18 @@ class NewCustomer extends Component {
                   e.preventDefault()
 
                   const {name, surname, company, age, type, email} = this.state.customer
+
+                  if (name === '' || surname === '' || company === '' || age === '' || type === '') {
+                    this.setState({
+                      error: true
+                    })
+                    return
+                  }
+
+                  this.setState({
+                    error: false
+                  })
+
                   const input = {
                     name,
                     surname,
@@ -144,7 +163,7 @@ class NewCustomer extends Component {
                     </select>
                   </div>
                 </div>
-                <button type="submit" className="btn btn-success float-right">Apply changes</button>
+                <button type="submit" className="btn btn-success float-right">Add Customer</button>
               </form>
             )}
           </Mutation>
