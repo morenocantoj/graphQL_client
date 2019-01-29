@@ -4,9 +4,9 @@ import { Query } from 'react-apollo'
 import { CUSTOMERS_QUERY } from '../queries'
 
 const Contacts = () => (
-  <Query query={CUSTOMERS_QUERY}>
+  <Query query={CUSTOMERS_QUERY} pollInterval={1000}>
     {
-      ({ loading, error, data }) => {
+      ({ loading, error, data, startPolling, stopPolling }) => {
         if (loading) return "Loading..."
         if (error) return `Error: ${error.message}`
         console.log(data.getCustomers)
