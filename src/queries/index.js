@@ -8,3 +8,19 @@ export const CUSTOMERS_QUERY = gql`{
     company
   }
 }`
+
+export const CUSTOMER_QUERY = gql`
+  query CheckCustomer($id: ID) {
+    getCustomer(id: $id){
+      id
+      name
+      surname
+      company
+      age
+      type
+      emails {
+        email
+      }
+    }
+  }
+`

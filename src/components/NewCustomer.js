@@ -191,7 +191,7 @@ class NewCustomer extends Component {
                     />
                   </div>
                   <div className="form-group col-md-6">
-                    <label>Type of Customer</label>
+                    <label>Customer Type</label>
                     <select
                       className="form-control"
                       onChange={(e) => {
