@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Mutation } from 'react-apollo'
 import { withRouter } from 'react-router-dom'
 
-import { UPDATE_CUSTOMER } from '../mutations'
+import { UPDATE_CUSTOMER } from '../../mutations'
 
 class FormEditCustomer extends Component {
 
