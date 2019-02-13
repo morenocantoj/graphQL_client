@@ -17,6 +17,9 @@ const Header = () => (
                     <Link to="/customers/new" className="btn btn-success">
                       New Customer
                     </Link>
+                    <Link to="/products/new" className="ml-2 btn btn-success">
+                      New Product
+                    </Link>
                   </li>
               </ul>
           </div>
