@@ -5,13 +5,25 @@ import { Link } from 'react-router-dom'
 import { PRODUCTS_QUERY } from '../../queries'
 import { DELETE_PRODUCT } from '../../mutations'
 
+import Success from '../Alerts/Success'
+
 class Products extends Component {
-  state = { }
+  state = {
+    alert: {
+      show: false,
+      message: ''
+    }
+  }
 
   render() {
+    const {alert: {show, message}} = this.state
+
+    const alert = (show) ? <Success message={message} /> : ''
+
     return (
       <Fragment>
         <h1 className="text-center mb-5">List of Products!</h1>
+        {alert}
         <Query query={PRODUCTS_QUERY} pollInterval={1000}>
           {
             ({ loading, error, data, startPolling, stopPolling }) => {
@@ -44,7 +56,27 @@ class Products extends Component {
                             </Link>
                           </td>
                           <td>
-                            <Mutation mutation={DELETE_PRODUCT}>
+                            <Mutation
+                              mutation={DELETE_PRODUCT}
+                              onCompleted={(data) => {
+                                // Show an alert
+                                this.setState({
+                                  alert: {
+                                    show: data.deleteProduct,
+                                    message: 'Product deleted successfully'
+                                  }
+                                }, () => {
+                                  setTimeout(() => {
+                                    this.setState({
+                                      alert: {
+                                        show: false,
+                                        message: ''
+                                      }
+                                    })
+                                  }, 3000)
+                                })
+                              }}
+                              >
                               {deleteProduct => (
                                 <button
                                   type="button"
