@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { Query } from 'react-apollo'
+import { Query, Mutation } from 'react-apollo'
 import { Link } from 'react-router-dom'
 
 import { PRODUCTS_QUERY } from '../../queries'
+import { DELETE_PRODUCT } from '../../mutations'
 
 class Products extends Component {
   state = { }
@@ -43,11 +44,23 @@ class Products extends Component {
                             </Link>
                           </td>
                           <td>
-                            <button
-                              type="button"
-                              className="btn btn-danger">
-                              &times; Delete
-                            </button>
+                            <Mutation mutation={DELETE_PRODUCT}>
+                              {deleteProduct => (
+                                <button
+                                  type="button"
+                                  className="btn btn-danger"
+                                  onClick={ () => {
+                                    if (window.confirm('Are you sure of delete this product?')) {
+                                      deleteProduct({
+                                        variables: {id}
+                                      })
+                                    }
+                                  }}
+                                  >
+                                    &times; Delete
+                                </button>
+                              )}
+                            </Mutation>
                           </td>
                         </tr>
                       )
