@@ -44,7 +44,8 @@ class NewProduct extends Component {
     newProduct().then(data => {
       this.cleanState()
 
-      // Redirect
+      // Redirect to all products
+      this.props.history.push('/products')
     })
   }
 
