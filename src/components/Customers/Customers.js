@@ -6,6 +6,7 @@ import { CUSTOMERS_QUERY } from '../../queries'
 import { DELETE_CUSTOMER } from '../../mutations'
 
 import Paginate from '../Paginate'
+import Success from '../Alerts/Success'
 
 class Customers extends Component {
 
@@ -15,6 +16,10 @@ class Customers extends Component {
     paginate: {
       offset: 0,
       actual: 1,
+    },
+    alert: {
+      show: false,
+      message: ''
     }
   }
 
@@ -37,6 +42,9 @@ class Customers extends Component {
   }
 
   render() {
+    const {alert: {show, message}} = this.state
+
+    const alert = (show) ? <Success message={message} /> : ''
     return (
       <Query query={CUSTOMERS_QUERY} pollInterval={1000} variables={{limit: this.limit, offset: this.state.paginate.offset}}>
         {
@@ -47,6 +55,7 @@ class Customers extends Component {
             return (
               <Fragment>
                 <h2 className="text-center">Customers List</h2>
+                {alert}
                 <ul className="list-group mt-4">
                   { data.getCustomers.map(item => (
                     <li key={item.id} className="list-group-item">
@@ -55,7 +64,26 @@ class Customers extends Component {
                           { item.name } { item.surname } - { item.company }
                         </div>
                         <div className="col-md-4 d-flex justify-content-end">
-                          <Mutation mutation={DELETE_CUSTOMER}>
+                          <Mutation
+                            mutation={DELETE_CUSTOMER}
+                            onCompleted={(data) => {
+                              // Show an alert
+                              this.setState({
+                                alert: {
+                                  show: data.deleteCustomer,
+                                  message: 'Customer deleted successfully'
+                                }
+                              }, () => {
+                                setTimeout(() => {
+                                  this.setState({
+                                    alert: {
+                                      show: false,
+                                      message: ''
+                                    }
+                                  })
+                                }, 3000)
+                              })
+                            }}>
                             { deleteCustomer => (
                               <button
                                 type="button"
