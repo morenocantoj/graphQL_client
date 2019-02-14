@@ -85,7 +85,7 @@ class Customers extends Component {
 
                 <Paginate
                   actual={this.state.paginate.actual}
-                  totalCustomers={data.totalCustomers}
+                  total={data.totalCustomers}
                   limit={this.limit}
                   PreviousPage={this.PreviousPage}
                   NextPage={this.NextPage}/>
